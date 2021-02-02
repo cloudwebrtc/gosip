@@ -126,5 +126,14 @@ func (p *udpProtocol) Send(target *Target, msg sip.Message) error {
 		}
 	}
 
+	err = p.connections.Put(conn, sockTTL)
+	if err != nil {
+		err = &ProtocolError{
+			Err:      err,
+			Op:       fmt.Sprintf("put %s connection to the pool", conn.Key()),
+			ProtoPtr: fmt.Sprintf("%p", p),
+		}
+	}
+
 	return err // should be nil
 }
